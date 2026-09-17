@@ -1089,10 +1089,13 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
   function axis(a, err){
     var s = st[a], k = K[a];
     s.e = s.e + K.ema*(err - s.e);
+    // the D term reads the smoothed error before the deadzone. taken after it, the step from
+    // 0 to 12 px as the target leaves the deadzone looks like a huge rate and kicks the servo
+    var raw = s.e / S;                                  // controller works in stage px
+    var d = (raw - s.prev)/0.05; s.prev = raw;
     var e = Math.abs(s.e) < K.dead ? 0 : s.e;
-    var epx = e / S;                                    // controller works in stage px
+    var epx = e / S;
     s.i = Math.max(-K.clamp, Math.min(K.clamp, s.i + epx*0.05));
-    var d = (epx - s.prev)/0.05; s.prev = epx;
     var out = k.p*epx + k.i*s.i + k.d*d;
     s.step = Math.max(-K.step, Math.min(K.step, out));
     return s.step;
@@ -1100,7 +1103,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
   // the control loop runs at 50 ms like the real one; drawing is interpolated between
   // its steps so a 20 Hz loop does not look like a 20 fps animation
-  var CTRL = 50, prevEx = 0, prevEy = 0, curEx = 0, curEy = 0, ticks = 0;
+  var CTRL = 50, prevEx = 0, prevEy = 0, curEx = 0, curEy = 0, ticks = 0,
+      prevPan = 90, curPan = 90, prevTilt = 90, curTilt = 90;
 
   function tick(){
     t += CTRL/1000;
@@ -1109,17 +1113,18 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       azWant = 90 + (pointer.x-0.5)*54 + chassisYaw;
       elWant = 90 + (pointer.y-0.5)*30;
     } else if(!reduce){
-      azWant = 90 + 17*Math.sin(t*0.21) + 5*Math.sin(t*0.53+1.7) + chassisYaw;
-      elWant = 90 + 6*Math.sin(t*0.29+1.1);
+      azWant = 90 + 29*Math.sin(t*0.048) + 7*Math.sin(t*0.12+1.7) + chassisYaw;
+      elWant = 90 + 8*Math.sin(t*0.085+1.1);
     }
     // nothing in the air teleports: the target closes on where it is going at a limited rate
-    var lim = 1.5;
+    var lim = 0.8;
     az += Math.max(-lim, Math.min(lim, (azWant-az)*0.22));
     el += Math.max(-lim, Math.min(lim, (elWant-el)*0.22));
 
-    // a pixel or two of sensor noise, which is what the EMA on the error is there for
-    var ex = (az-pan)*PXDEG + (Math.random()-0.5)*3*S,
-        ey = (el-tilt)*PXDEG + (Math.random()-0.5)*3*S;
+    // under a pixel of sensor noise, which is what the EMA on the error is there for.
+    // any more than this and the derivative term turns it into visible twitching
+    var ex = (az-pan)*PXDEG + (Math.random()-0.5)*0.8*S,
+        ey = (el-tilt)*PXDEG + (Math.random()-0.5)*0.8*S;
     pan  += axis('pan',  ex);
     tilt += axis('tilt', ey);
     pan = Math.max(0, Math.min(180, pan)); tilt = Math.max(0, Math.min(180, tilt));
@@ -1139,7 +1144,9 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     state = lockCount > 8 ? 'locked' : 'searching';
 
     prevEx = curEx; prevEy = curEy;
+    prevPan = curPan; prevTilt = curTilt;
     curEx = (az-pan)*PXDEG; curEy = (el-tilt)*PXDEG;
+    curPan = pan; curTilt = tilt;
 
     // telemetry goes out at 10 Hz on the robot, so the numbers settle instead of flickering
     if((++ticks & 1) === 0) readouts(curEx, curEy);
@@ -1147,15 +1154,19 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
   function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
-  function draw(ex, ey){
+  function draw(ex, ey, pv, tv){
     var ink=css('--ink'), rule=css('--rule'), muted=css('--muted'), bg=css('--bg'),
         col = state==='locked' ? css('--good') : css('--warn');
     ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
-    // grid
+    // the grid stands in for the world, so it slides as the camera slews. without this the
+    // target appears to jump on its own instead of the frame panning underneath it
+    var cw = W/12, ch = H/7,
+        ox = -((pv-90)*PXDEG % cw + cw) % cw,
+        oy = -((tv-90)*PXDEG % ch + ch) % ch;
     ctx.strokeStyle=rule; ctx.lineWidth=1;
-    for(var x=0;x<=W;x+=W/12){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-    for(var y=0;y<=H;y+=H/7){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    for(var x=ox;x<=W+cw;x+=cw){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(var y=oy;y<=H+ch;y+=ch){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
 
     // deadzone box
     ctx.strokeStyle=muted; ctx.setLineDash([6,6]); ctx.lineWidth=1.5;
@@ -1194,7 +1205,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     ctx.font='600 22px "JetBrains Mono", monospace'; ctx.fillStyle=col;
     ctx.fillText(state.toUpperCase(), tx-box, ty-box*0.62-16);
     ctx.font='400 20px "JetBrains Mono", monospace'; ctx.fillStyle=muted;
-    ctx.fillText('DEADZONE 12 px', CX+K.dead+14, CY-K.dead-10);
+    ctx.fillText('DEADZONE 12 px', CX+K.dead+16, CY+K.dead+26);
   }
 
   function readouts(ex, ey){
@@ -1210,8 +1221,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
   // settle the loop before the first paint so the page is never blank at rest
   for(var i=0;i<60;i++) tick();
-  prevEx = curEx; prevEy = curEy;
-  draw(curEx, curEy);
+  prevEx = curEx; prevEy = curEy; prevPan = curPan; prevTilt = curTilt;
+  draw(curEx, curEy, curPan, curTilt);
   readouts(curEx, curEy);
 
   if(!reduce){
@@ -1220,7 +1231,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       var dt = Math.min(now - last, 200); last = now; acc += dt;
       while(acc >= CTRL){ tick(); acc -= CTRL; }
       var a = acc/CTRL;
-      draw(prevEx + (curEx-prevEx)*a, prevEy + (curEy-prevEy)*a);
+      draw(prevEx + (curEx-prevEx)*a, prevEy + (curEy-prevEy)*a,
+           prevPan + (curPan-prevPan)*a, prevTilt + (curTilt-prevTilt)*a);
       requestAnimationFrame(frame);
     });
   }
