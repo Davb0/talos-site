@@ -245,11 +245,12 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <p class="eyebrow">Mobile ground-to-air tracking platform</p>
     <h1>TALOS</h1>
     <p class="sub">A tracked robot that watches the sky.</p>
-    <p class="lede">Two drone sightings shut Gatwick for 33 hours in 2018 — a thousand flights,
-      140,000 passengers stranded. Copenhagen lost four hours in 2025; Munich lost a night. The
+    <p class="lede">Two drone sightings shut Gatwick for 33 hours in 2018. A thousand flights
+      cancelled, 140,000 passengers stranded. Copenhagen lost four hours in 2025, and Munich lost
+      a night. The
       equipment that finds the drone is priced for airports. <b>This is the workbench version:</b>
       a tracked chassis, a two-axis camera turret that holds a flying target on its own, and a
-      receiver for the ID that every legal drone is required to broadcast — so the turret knows
+      receiver for the ID that every legal drone is required to broadcast, so the turret knows
       where to look <b>before the camera has seen anything</b>.</p>
 
     <dl class="specstrip">
@@ -263,7 +264,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
     <div class="console">
       <div class="console-bar">
-        <span class="t">Turret loop — simulated</span>
+        <span class="t">Turret loop · simulated</span>
         <span class="badge locked" id="stateBadge">Locked</span>
         <span class="badge off" id="assistBadge">Chassis assist</span>
       </div>
@@ -276,7 +277,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         <div><dt>Step</dt><dd id="roStep">0.00°</dd></div>
       </dl>
     </div>
-    <p class="caption">Simulated target, real constants — the gains, deadzone, EMA and step clamp
+    <p class="caption">Simulated target, real constants. The gains, deadzone, EMA and step clamp
       below are read straight out of <span class="mono">backend/config.py</span>.
       Move your pointer across the frame to fly the target yourself.</p>
   </div>
@@ -286,22 +287,22 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <div class="prose">
       <p>I started with the part that looked hardest: keeping a camera pointed at something
         flying. That took three rewrites of the control loop, a tracker that remembers what the
-        target looked like, and a chassis that turns when the turret runs out of room. It works —
-        you click a flying object in the video feed and the turret holds it.</p>
+        target looked like, and a chassis that turns when the turret runs out of room. It works.
+        You click a flying object in the video feed and the turret holds it.</p>
       <p>Then the flaw I had built in became obvious. <b>Somebody has to click.</b> The robot was
         blind until a human had already spotted the target, and a drone a couple of hundred metres
         out is a speck against a bright sky. By the time you can see it, it is already over
         whatever it came for. A tracker that needs to be told where to look is a demo, not a
         sensor.</p>
       <p>So I went looking for how something this small could know about a drone before seeing it.
-        Radar is out — the price, the licensing, the complexity. Microphone arrays are still
+        Radar is out on price, licensing and complexity. Microphone arrays are still
         research projects. And then I found the thing that reframed the whole project: since 2024,
         in both the EU and the US, <b>a drone is legally required to announce itself</b>. It
         broadcasts an identifier, its position, its altitude and its pilot's location, in the
         clear, over Bluetooth and Wi-Fi, for anyone to receive. A chip that costs about 50 lei can
         hear it.</p>
-      <p>That turns Talos from a turret that tracks into a sensor that finds and then tracks — and
-        it is the part nobody expects. Everything commercial in this space is either a stationary
+      <p>That turns Talos from a turret that tracks into a sensor that finds and then tracks,
+        and it is the part nobody expects. Everything commercial in this space is either a stationary
         tripod camera or a cost-prohibitive UGV with a closed ecosystem. This is the accessible
         version: a Pi-class computer, off-the-shelf servos, and a chassis you can bolt anything
         onto.</p>
@@ -318,7 +319,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         <div class="num">STEP 02</div>
         <h3>Drive</h3>
         <p>Close the loop from turret to tracks so the robot pursues on its own. Today the chassis
-          only assists the turret; a human still drives it.</p>
+          only assists the turret, and a human still drives it.</p>
         <span class="status wip">In progress</span>
       </div>
       <div class="step">
@@ -341,7 +342,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           roughly four hours in September 2025. Munich suspended flights the following month, and
           about three thousand passengers spent the night in the terminal.</p>
         <p>The same pattern shows up wherever a small aircraft can reach something valuable.
-          Drones drop phones and drugs into prison yards — 479 incidents in US federal prisons in
+          Drones drop phones and drugs into prison yards. There were 479 incidents in US federal prisons in
           2024, up from 23 in 2018, and 1,712 recorded across England and Wales in a single year.
           They ground firefighting aircraft: the US Forest Service counted 218 drone incursions
           over wildfires in 2025, 184 of them over two fires, more than the previous seven years
@@ -359,7 +360,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         <table class="data">
           <tbody>
             <tr><td class="k">Gatwick · Dec 2018</td><td class="v">33 h closed</td></tr>
-            <tr><td class="k">— flights cancelled</td><td class="v">~1,000</td></tr>
+            <tr><td class="k">Flights cancelled</td><td class="v">~1,000</td></tr>
             <tr><td class="k">Copenhagen · Sep 2025</td><td class="v">~4 h closed</td></tr>
             <tr><td class="k">Munich · Oct 2025</td><td class="v">~3,000 pax</td></tr>
             <tr><td class="k">Romania · Sep 2025</td><td class="v">F-16s · debris</td></tr>
@@ -393,7 +394,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <div class="step">
         <div class="num">ROLE 04</div>
         <h3>Restricted sites</h3>
-        <p>Substations, ports, fuel depots, gas platforms — fixed no-fly zones with long fences and
+        <p>Substations, ports, fuel depots, gas platforms. Fixed no-fly zones with long fences and
           nobody permanently watching the sky above them.</p>
       </div>
       <div class="step">
@@ -412,29 +413,29 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
     <div class="prose" style="margin-top:34px">
       <p><b>And what it honestly can't do.</b> A drone that doesn't broadcast is invisible to the
-        receiver: toy drones under 250&nbsp;g, home-built FPV quads, and anything military — the
+        receiver: toy drones under 250&nbsp;g, home-built FPV quads, and anything military. The
         Geran over Tulcea announced nothing. Those are exactly the cases where the camera has to
         earn its place, which is why tracking came first and stays the core of the project. Talos
         detects and tracks. It doesn't stop anything, and it isn't armed.</p>
       <p><b>The question everybody asks: why not jam it?</b> Technically the platform is already
-        most of the way there — the hard half of any counter-drone system is finding the thing and
+        most of the way there. The hard half of any counter-drone system is finding the thing and
         keeping something pointed at it, and a transmitter is a small box. So the honest answer is
         that a jammer <em>could</em> be integrated, and deliberately isn't.</p>
       <p>In Romania and across the EU, jamming equipment is banned outright: manufacturing,
         importing, owning, advertising, selling or using a device designed to cause harmful
         interference is prohibited and fined under Government Decision 740/2016, which ANCOM
-        enforces. The reasoning is that a jammer doesn't only silence its target — it takes out
+        enforces. The reasoning is that a jammer doesn't only silence its target, it takes out
         everything nearby, including the calls somebody makes to the emergency number. In the US
         the FCC bans it under the Communications Act (sections 301, 302(b) and 333), with fines up
-        to $112,500 per violation, and not even local police may use one; that authority sits with
+        to $112,500 per violation, and not even local police may use one. That authority sits with
         specific federal agencies. Interfering with an aircraft in flight is a separate and far
         more serious offence again.</p>
       <p>Which means a jammer isn't a feature I left out for lack of time. In the hands of a
         student it would be illegal to own before it was ever switched on, and the legal version
-        of this problem — telling an operator, a control room or a ranger <em>what is up there and
-        whose it is</em> — is the part that was actually missing.</p>
+        of this problem, telling an operator, a control room or a ranger <em>what is up there and
+        whose it is</em>, is the part that was actually missing.</p>
     </div>
-    <p class="caption">Sources —
+    <p class="caption">Sources:
       <a href="https://en.wikipedia.org/wiki/Gatwick_Airport_drone_incident">Gatwick 2018</a> ·
       <a href="https://www.aljazeera.com/amp/news/2025/9/22/copenhagen-airport-shut-after-sighting-of-unidentified-drones">Copenhagen</a> ·
       <a href="https://www.aerotime.aero/articles/munich-airport-reopens-latest-european-drone-breach">Munich</a> ·
@@ -453,22 +454,22 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
   <section id="build">
     <div class="shead"><h2>The first build</h2><span class="n">PROTOTYPE</span></div>
     <div class="prose">
-      <p>I put the first Talos together for a freestyle robotics competition — the category with
+      <p>I put the first Talos together for a freestyle robotics competition, the category with
         no fixed brief, where you turn up with whatever you built and explain why it should
         exist. It was made out of whatever was lying around: a tracked chassis, two 12&nbsp;V motors
         wired to point in opposite directions, a Raspberry Pi, a pair of MG90S servos on a bracket,
         and a lithium pack soldered together by hand.</p>
       <p>Most of it I decided in the last week. The turret bracket was sized to the servos that
-        were in the box rather than the other way round; the tracking ran on a Flask page instead of
-        an application because a browser was the fastest thing to put a video feed into; the servo
+        were in the box rather than the other way round. The tracking ran on a Flask page instead of
+        an application because a browser was the fastest thing to put a video feed into, and the servo
         commands went out through an Arduino because that is what was already wired up.</p>
-      <p>It worked on the day. Not smoothly — but you could click a flying object in the video feed
+      <p>It worked on the day. Not smoothly, but you could click a flying object in the video feed
         and watch the turret hold it, which was the whole argument. That was enough.</p>
       <p>The interesting part is what happened afterwards: I didn't take it apart for the next
         project. Everything on this page is the second life of that prototype. The Arduino link
         became a PCA9685 on I²C, the Flask page became a FastAPI server and a PyQt6 application,
         CSRT became KCF with a colour memory behind it, the proportional-only servo loop became two
-        clamped PID loops — and the chassis stopped being whatever was lying around and started
+        clamped PID loops, and the chassis stopped being whatever was lying around and started
         being drawn in CAD.</p>
     </div>
   </section>
@@ -479,7 +480,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <div class="prose">
         <p>This was the hard part. A KCF correlation tracker does the frame-to-frame work, with
           MOG2 background subtraction running behind it to find things that move in the first
-          place. On its own KCF loses the target constantly — especially when somebody walks
+          place. On its own KCF loses the target constantly, especially when somebody walks
           between the camera and the thing you were following.</p>
         <p>So the tracker also remembers what the target <em>looked</em> like. On the initial click
           it learns an HSV colour histogram of the region, and when KCF fails it back-projects that
@@ -490,7 +491,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           times larger, or a patch whose colour has drifted too far from what was learned.</p>
         <p>The state machine matters more than any single algorithm. While <b>searching</b>, the
           turret keeps sweeping in the direction the target was last travelling rather than
-          stopping — which is usually where it reappears.</p>
+          stopping, which is usually where it reappears.</p>
       </div>
       <div class="panel">
         <h3>Vision constants</h3>
@@ -544,7 +545,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
             <!-- searching -> idle (arc under) -->
             <path d="M 648 156 L 648 200 L 112 200 L 112 156" fill="none" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ah)"/>
-            <text x="380" y="217" text-anchor="middle" font-size="10.5" fill="var(--warn)">50 frames with no re-acquire — give up</text>
+            <text x="380" y="217" text-anchor="middle" font-size="10.5" fill="var(--warn)">50 frames with no re-acquire, give up</text>
 
             <!-- locked self loop -->
             <path d="M 348 86 C 348 44, 412 44, 412 86" fill="none" stroke="var(--good)" stroke-width="1.4" marker-end="url(#ah)"/>
@@ -552,7 +553,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           </g>
         </svg>
       </div>
-      <figcaption>Tracker state machine — colours are the ones the tracker actually draws on the
+      <figcaption>Tracker state machine. Colours are the ones the tracker actually draws on the
         annotated <span class="mono">/cam0</span> stream.</figcaption>
     </figure>
   </section>
@@ -562,14 +563,14 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <div class="split">
       <div class="prose">
         <p>Two independent PID loops, one for pan and one for tilt, both driven by how far the
-          target's centre sits from the centre of the image, in pixels. Not degrees — the loop
+          target's centre sits from the centre of the image, in pixels. Not degrees, because the loop
           never knows the real-world angle to the target, only the error on the sensor.</p>
         <p>The first version shook so hard it looked broken. Four things fixed it: the error is
           smoothed with an exponential moving average before it reaches the controller, the
           integral term is clamped so it cannot wind up while the target is occluded, errors
           under 12 px are treated as zero, and no single frame may move a servo more than 3.5°.</p>
         <p>When the pan servo passes 30° off centre, the tracks spin the robot to bring the turret
-          back toward the middle of its range. Early on this ping-ponged left–right forever;
+          back toward the middle of its range. Early on this ping-ponged left and right forever, until
           hysteresis and a timeout stopped it.</p>
       </div>
       <div class="panel">
@@ -605,17 +606,17 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         <p><b>What works today</b> is one piece of that: when the pan servo passes 30° off centre,
           the tracks rotate the robot to bring the turret back toward the middle of its range, with
           hysteresis and a timeout so it can't oscillate. The turret leads and the chassis follows.
-          Everything else — actually going somewhere — is still a human on WASD or an Xbox
+          Everything else, actually going somewhere, is still a human on WASD or an Xbox
           controller.</p>
         <p><b>What's in progress</b> is closing that loop. The chassis has no idea where it is yet:
           no wheel odometry, no position feedback, and the lidar that would let it avoid obstacles
           is still synthesised in software. The GPS and IMU going on for Remote ID aiming are the
-          same two sensors autonomy needs, which is convenient — heading and position arrive once,
+          same two sensors autonomy needs, which is convenient. Heading and position arrive once,
           and both features get to use them.</p>
         <p>The order I plan to build it in: hold a heading while the turret tracks, then reposition
           on command without losing the target from frame, then obstacle avoidance from real lidar,
           then a patrol route it drives on its own while watching the sky. Each step is testable on
-          its own, which is the only reason I think it's achievable — the version where a robot
+          its own, which is the only reason I think it's achievable. The version where a robot
           decides everything at once is how projects die.</p>
       </div>
       <div class="panel">
@@ -642,7 +643,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           anyone and they will tell you a drone in the sky is anonymous. It isn't. Since
           <b>1 January 2024</b> in the EU, and enforced from <b>16 March 2024</b> in the US, a
           registered drone has to carry <b>Remote ID</b> and broadcast an identifier, its position,
-          altitude, speed, heading and its pilot's location — unencrypted, over Bluetooth and
+          altitude, speed, heading and its pilot's location, unencrypted, over Bluetooth and
           Wi-Fi, several times a minute. It is a number plate you can read from a distance, and
           anyone is allowed to receive it.</p>
         <p>An ESP32-C6 on the robot listens for those broadcasts, decodes them and passes them to
@@ -655,7 +656,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           the camera loses the target, the turret falls back to the Remote ID bearing.</p>
         <p>This only works for drones that broadcast. Drones under 250&nbsp;g and many home-built
           FPV quads don't, so the camera stays the main sensor. The receiver doesn't transmit
-          anything; the project detects and tracks, nothing more.</p>
+          anything. The project detects and tracks, nothing more.</p>
       </div>
       <div class="panel">
         <h3>Receiver</h3>
@@ -674,7 +675,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
     <figure>
       <div class="figscroll">
-        <svg viewBox="0 0 900 240" role="img" aria-label="Remote ID cueing: a test transmitter broadcasts over Bluetooth and Wi-Fi to the ESP32-C6 receiver, which sends it over USB to the Jetson; the Jetson turns GPS positions into a pan and tilt setpoint, the turret slews, and the camera tracker locks on. If the camera loses the target the turret falls back to the Remote ID bearing.">
+        <svg viewBox="0 0 900 240" role="img" aria-label="Remote ID cueing: a test transmitter broadcasts over Bluetooth and Wi-Fi to the ESP32-C6 receiver, which sends it over USB to the Jetson. The Jetson turns GPS positions into a pan and tilt setpoint, the turret slews, and the camera tracker locks on. If the camera loses the target the turret falls back to the Remote ID bearing.">
           <g font-family="JetBrains Mono, monospace">
             <defs>
               <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
@@ -715,9 +716,9 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
             <text x="635" y="154" text-anchor="middle" font-size="10.5" fill="var(--warn)">camera loses it → back to the Remote ID bearing</text>
 
             <text x="15" y="196" font-size="10" letter-spacing="1.6" fill="var(--muted)">OUTDOOR</text>
-            <text x="130" y="196" font-size="10.5" fill="var(--ink-2)">GPS fix on both ends — the turret aims straight at the drone</text>
+            <text x="130" y="196" font-size="10.5" fill="var(--ink-2)">GPS fix on both ends, so the turret aims straight at the drone</text>
             <text x="15" y="222" font-size="10" letter-spacing="1.6" fill="var(--muted)">INDOOR</text>
-            <text x="130" y="222" font-size="10.5" fill="var(--ink-2)">no GPS — a detection starts the search sweep and the camera finds it</text>
+            <text x="130" y="222" font-size="10.5" fill="var(--ink-2)">no GPS, so a detection starts the search sweep and the camera finds it</text>
           </g>
         </svg>
       </div>
@@ -749,12 +750,12 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         <p>Strip the armour and the effector off any of them and what is left is a chassis that can
           move, a sensor that says <em>something is out there</em>, a turret that slews onto it, a
           camera that holds it, and a link to an operator. That is Talos, at 1:20 scale and on a
-          student's budget — the detect-and-track half, which is the half that has to work before
+          student's budget. The detect-and-track half is the half that has to work before
           the other half means anything.</p>
         <p><b>Where the war fits in.</b> Ukraine spends its nights against Shahed and Geran
           one-way attack drones, and the problem there is arithmetic. A Patriot interceptor costs
-          around $4.2&nbsp;million; the drone it kills costs roughly $20,000. A Gepard — a 1970s
-          anti-aircraft gun — does the same job for a few thousand a burst, and a mobile fire group
+          around $4.2&nbsp;million, and the drone it kills costs roughly $20,000. A Gepard, a 1970s
+          anti-aircraft gun, does the same job for a few thousand a burst, and a mobile fire group
           in a pickup with a thermal sight and a heavy machine gun does it for less. Against cheap
           mass, expensive defences lose even when they win.</p>
         <p>The lesson that transfers here isn't the gun, it's <b>where the cost hides</b>. The
@@ -779,7 +780,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
             <tr><td class="k">Slewing mount</td><td class="v">2-axis servo turret</td></tr>
             <tr><td class="k">Local awareness</td><td class="v">Lidar (sim)</td></tr>
             <tr><td class="k">Operator link</td><td class="v">WebSocket + MJPEG</td></tr>
-            <tr><td class="k">Effector</td><td class="v">None — by choice</td></tr>
+            <tr><td class="k">Effector</td><td class="v">None, by choice</td></tr>
           </tbody>
         </table>
         <dl class="kv" style="margin-top:16px">
@@ -805,15 +806,15 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <div class="split">
       <div class="prose">
         <p>A FastAPI server runs on the robot and a PyQt6 application runs on the operator's
-          laptop. Video goes over plain MJPEG on two endpoints; everything else rides one
+          laptop. Video goes over plain MJPEG on two endpoints, and everything else rides one
           WebSocket.</p>
-        <p>Status — turret angles, pixel error, tracker state, motor speeds, closest obstacle —
-          is broadcast ten times a second. The lidar scan, which is far heavier, goes out five
+        <p>The status block, with turret angles, pixel error, tracker state, motor speeds and the
+          closest obstacle, is broadcast ten times a second. The lidar scan, which is far heavier, goes out five
           times a second on the same socket. The app sends back clicks, turret nudges, drive
           commands and resets.</p>
         <p>How much of the robot's surroundings that scan will actually cover is still an open
           question. The unit isn't fitted yet, so what the radar draws today is a synthesised
-          sweep standing in for a real one — the scan area gets settled when the hardware does.</p>
+          sweep standing in for a real one, and the scan area gets settled when the hardware does.</p>
         <p>The operator app shows both camera feeds, a polar radar for the lidar, the status
           block and a drive pad. You can drive with WASD or an Xbox controller.</p>
         <p>Every actuator has a simulated stand-in, so the whole stack runs on a laptop with no
@@ -836,7 +837,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
     <figure>
       <div class="figscroll">
-        <svg viewBox="0 0 900 430" role="img" aria-label="System diagram: a four-cell lithium pack feeds a buck converter for logic and the L298N driver for the motors; the compute board runs vision and control, driving the PCA9685 for the servos and reading the cameras and lidar; a FastAPI server links over MJPEG and WebSocket to the operator application.">
+        <svg viewBox="0 0 900 430" role="img" aria-label="System diagram: a four-cell lithium pack feeds a buck converter for logic and the L298N driver for the motors. The compute board runs vision and control, driving the PCA9685 for the servos and reading the cameras and lidar; a FastAPI server links over MJPEG and WebSocket to the operator application.">
           <g font-family="JetBrains Mono, monospace">
             <defs>
               <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
@@ -918,8 +919,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           </g>
         </svg>
       </div>
-      <figcaption>Signal chain from the pack to the operator. The compute board is mid-migration —
-        the Pi 4B is what flew, the Jetson Orin Nano is what is next.</figcaption>
+      <figcaption>Signal chain from the pack to the operator. The compute board is mid-migration. The Pi 4B
+        is what flew, the Jetson Orin Nano is what is next.</figcaption>
     </figure>
   </section>
 
@@ -930,7 +931,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <p>The competition chassis was an off-the-shelf tracked base with holes drilled where they
         were needed. The current one is drawn properly: a 223.2 &times; 120.0&nbsp;mm tub that carries
         the drive motors, the pack and the electronics, with the turret mounting directly to the
-        top face so the pan axis sits over the centre of rotation — which is what lets the chassis
+        top face so the pan axis sits over the centre of rotation, which is what lets the chassis
         assist manoeuvre work without the target sliding across the frame while the robot turns.</p>
       <p>Moving to a Jetson meant the compute no longer fits a Raspberry Pi footprint, so it gets
         its own plate: a 130.0 &times; 98.0&nbsp;mm platform that matches the developer kit's mounting
@@ -981,7 +982,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       </div>
       <div class="prose">
         <p>The motors sit on opposite sides wired in opposite directions, so the robot steers
-          differentially — it turns by running one track faster than the other. On top sits the
+          differentially, turning by running one track faster than the other. On top sits the
           pan–tilt turret: one servo rotates the camera horizontally, the other tilts it, which
           together covers the airspace above and around the robot.</p>
         <p>Servo timing is deliberately offloaded to the PCA9685 over I²C rather than bit-banged on
@@ -989,7 +990,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           that buzzes.</p>
         <p><b>Next platform:</b> a Jetson Orin Nano with <span class="mono">Jetson.GPIO</span> for
           the motors, the same PCA9685 over I²C for the servos, and an IMX678 camera through
-          GStreamer — plus a real RPLIDAR in place of the synthesised one. An ESP32-C6 on USB
+          GStreamer, plus a real RPLIDAR in place of the synthesised one. An ESP32-C6 on USB
           listens for Remote ID, and a GPS module with a BNO085 IMU gives the robot its own
           position and heading for aiming outdoors.</p>
       </div>
@@ -1049,7 +1050,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
   </section>
 
   <footer>
-    <span>Project Talos — ground-to-air tracking platform</span>
+    <span>Project Talos · ground-to-air tracking platform</span>
     <span>Python · OpenCV · FastAPI · PyQt6</span>
   </footer>
 </main>
@@ -1097,17 +1098,28 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     return s.step;
   }
 
-  function tick(){
-    t += 0.05;
-    if(pointer){
-      az = 90 + (pointer.x-0.5)*54 + chassisYaw;
-      el = 90 + (pointer.y-0.5)*30;
-    } else if(!reduce){
-      az = 90 + 26*Math.sin(t*0.29) + 9*Math.sin(t*0.83+1.7) + chassisYaw;
-      el = 90 + 11*Math.sin(t*0.41+1.1);
-    }
+  // the control loop runs at 50 ms like the real one; drawing is interpolated between
+  // its steps so a 20 Hz loop does not look like a 20 fps animation
+  var CTRL = 50, prevEx = 0, prevEy = 0, curEx = 0, curEy = 0, ticks = 0;
 
-    var ex = (az-pan)*PXDEG, ey = (el-tilt)*PXDEG;
+  function tick(){
+    t += CTRL/1000;
+    var azWant = az, elWant = el;
+    if(pointer){
+      azWant = 90 + (pointer.x-0.5)*54 + chassisYaw;
+      elWant = 90 + (pointer.y-0.5)*30;
+    } else if(!reduce){
+      azWant = 90 + 17*Math.sin(t*0.21) + 5*Math.sin(t*0.53+1.7) + chassisYaw;
+      elWant = 90 + 6*Math.sin(t*0.29+1.1);
+    }
+    // nothing in the air teleports: the target closes on where it is going at a limited rate
+    var lim = 1.5;
+    az += Math.max(-lim, Math.min(lim, (azWant-az)*0.22));
+    el += Math.max(-lim, Math.min(lim, (elWant-el)*0.22));
+
+    // a pixel or two of sensor noise, which is what the EMA on the error is there for
+    var ex = (az-pan)*PXDEG + (Math.random()-0.5)*3*S,
+        ey = (el-tilt)*PXDEG + (Math.random()-0.5)*3*S;
     pan  += axis('pan',  ex);
     tilt += axis('tilt', ey);
     pan = Math.max(0, Math.min(180, pan)); tilt = Math.max(0, Math.min(180, tilt));
@@ -1126,8 +1138,11 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     if(mag < 90*S){ lockCount = Math.min(lockCount+1, 20); } else { lockCount = Math.max(lockCount-1, 0); }
     state = lockCount > 8 ? 'locked' : 'searching';
 
-    draw(ex, ey);
-    readouts(ex, ey);
+    prevEx = curEx; prevEy = curEy;
+    curEx = (az-pan)*PXDEG; curEy = (el-tilt)*PXDEG;
+
+    // telemetry goes out at 10 Hz on the robot, so the numbers settle instead of flickering
+    if((++ticks & 1) === 0) readouts(curEx, curEy);
   }
 
   function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
@@ -1193,9 +1208,22 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     elAssist.className = 'badge ' + (yawAssist ? 'searching' : 'off');
   }
 
-  // paint a settled frame immediately so the page is never blank at rest
-  for(var i=0;i<40;i++) tick();
-  if(!reduce) setInterval(tick, 50);
+  // settle the loop before the first paint so the page is never blank at rest
+  for(var i=0;i<60;i++) tick();
+  prevEx = curEx; prevEy = curEy;
+  draw(curEx, curEy);
+  readouts(curEx, curEy);
+
+  if(!reduce){
+    var last = performance.now(), acc = 0;
+    requestAnimationFrame(function frame(now){
+      var dt = Math.min(now - last, 200); last = now; acc += dt;
+      while(acc >= CTRL){ tick(); acc -= CTRL; }
+      var a = acc/CTRL;
+      draw(prevEx + (curEx-prevEx)*a, prevEy + (curEy-prevEy)*a);
+      requestAnimationFrame(frame);
+    });
+  }
 })();
 </script>
 
