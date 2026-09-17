@@ -19,6 +19,9 @@ the turret inside its range.
   test transmitter, outdoor GPS-aimed version on video.
 - **Why it matters** — documented drone incursions (Gatwick, Copenhagen, Munich, Tulcea,
   prisons, wildfires) with sources, plus six realistic roles for a cheap detect-and-track unit.
+- **Autonomy (WIP)** — what the chassis does today vs. the ladder up to a self-driven patrol.
+- **Scaled up** — how the same block diagram appears in vehicle-mounted counter-UAS systems,
+  the cost asymmetry behind cheap air defence, and where Remote ID stops being useful.
 - Tracking pipeline, turret control, system architecture, bill of materials and build log.
 
 ## Running it

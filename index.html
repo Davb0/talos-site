@@ -228,7 +228,9 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <a href="#build">First build</a>
       <a href="#tracking">Tracking</a>
       <a href="#turret">Turret</a>
+      <a href="#drive">Autonomy</a>
       <a href="#detect">Remote ID</a>
+      <a href="#scale">Scaled up</a>
       <a href="#system">System</a>
       <a href="#cad">CAD</a>
       <a href="#hardware">Hardware</a>
@@ -592,6 +594,46 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     </div>
   </section>
 
+  <section id="drive">
+    <div class="shead"><h2>Driving itself</h2><span class="n">AUTONOMY · WIP</span></div>
+    <div class="split">
+      <div class="prose">
+        <p>A camera bolted to a tripod is a tripod. The reason Talos sits on tracks is that a
+          target does not stay conveniently in front of you: it goes behind a building, behind a
+          treeline, or simply out past the end of the turret's travel. Being able to move is what
+          separates a fixed sensor from one that keeps working.</p>
+        <p><b>What works today</b> is one piece of that: when the pan servo passes 30° off centre,
+          the tracks rotate the robot to bring the turret back toward the middle of its range, with
+          hysteresis and a timeout so it can't oscillate. The turret leads and the chassis follows.
+          Everything else — actually going somewhere — is still a human on WASD or an Xbox
+          controller.</p>
+        <p><b>What's in progress</b> is closing that loop. The chassis has no idea where it is yet:
+          no wheel odometry, no position feedback, and the lidar that would let it avoid obstacles
+          is still synthesised in software. The GPS and IMU going on for Remote ID aiming are the
+          same two sensors autonomy needs, which is convenient — heading and position arrive once,
+          and both features get to use them.</p>
+        <p>The order I plan to build it in: hold a heading while the turret tracks, then reposition
+          on command without losing the target from frame, then obstacle avoidance from real lidar,
+          then a patrol route it drives on its own while watching the sky. Each step is testable on
+          its own, which is the only reason I think it's achievable — the version where a robot
+          decides everything at once is how projects die.</p>
+      </div>
+      <div class="panel">
+        <h3>Autonomy ladder</h3>
+        <dl class="kv">
+          <div><dt>Turret holds target</dt><dd>Working</dd></div>
+          <div><dt>Chassis assists turret</dt><dd>Working</dd></div>
+          <div><dt>Manual drive · pad/stick</dt><dd>Working</dd></div>
+          <div><dt>Heading hold</dt><dd>Next</dd></div>
+          <div><dt>Reposition, keep lock</dt><dd>Next</dd></div>
+          <div><dt>Obstacle avoidance</dt><dd>Needs lidar</dd></div>
+          <div><dt>Patrol route</dt><dd>Planned</dd></div>
+          <div><dt>Wheel odometry</dt><dd>None yet</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
   <section id="detect">
     <div class="shead"><h2>Knowing where to look</h2><span class="n">REMOTE ID</span></div>
     <div class="split">
@@ -692,6 +734,70 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         is holding the stick can walk it around. The full outdoor version, aimed by GPS, is shown
         on video.</p>
     </div>
+  </section>
+
+  <section id="scale">
+    <div class="shead"><h2>The same shape, one size up</h2><span class="n">SCALED UP</span></div>
+    <div class="split">
+      <div class="prose">
+        <p>When armies build the thing this project is a model of, they call it mobile
+          counter-UAS, and the drawing looks familiar. The US Army's M-LIDS pairs two armoured
+          vehicles: one carries the radar that detects and tracks, the other a remote turret with
+          an electro-optical and infrared sensor on it. Northrop's M-ACE is a light truck with a
+          mast holding 3D radar, radio-frequency sensors and cameras. DE&#8209;M&#8209;SHORAD is a
+          Stryker with a 50&nbsp;kW laser where the turret goes.</p>
+        <p>Strip the armour and the effector off any of them and what is left is a chassis that can
+          move, a sensor that says <em>something is out there</em>, a turret that slews onto it, a
+          camera that holds it, and a link to an operator. That is Talos, at 1:20 scale and on a
+          student's budget — the detect-and-track half, which is the half that has to work before
+          the other half means anything.</p>
+        <p><b>Where the war fits in.</b> Ukraine spends its nights against Shahed and Geran
+          one-way attack drones, and the problem there is arithmetic. A Patriot interceptor costs
+          around $4.2&nbsp;million; the drone it kills costs roughly $20,000. A Gepard — a 1970s
+          anti-aircraft gun — does the same job for a few thousand a burst, and a mobile fire group
+          in a pickup with a thermal sight and a heavy machine gun does it for less. Against cheap
+          mass, expensive defences lose even when they win.</p>
+        <p>The lesson that transfers here isn't the gun, it's <b>where the cost hides</b>. The
+          cheap layer is not short of firepower, it is short of eyes: finding the thing at night,
+          knowing where to look, and keeping something pointed at it while it moves. That is
+          exactly what a $50 receiver, a $10 IMU and a camera on two servos are for, and it is
+          why I kept the project on the sensor side.</p>
+        <p><b>And the limit, stated plainly.</b> Remote ID is a civil aviation rule. A Shahed
+          broadcasts nothing, and the drone that crossed into Tulcea announced nothing. Against
+          military drones the Remote ID half of this design is worthless and only the camera and
+          the infrared channel carry over. Talos is a prototype of the sensing pattern, not a
+          weapon, and I'd rather say that than let the comparison do work it hasn't earned.</p>
+      </div>
+      <div class="panel">
+        <h3>Same block diagram</h3>
+        <table class="data">
+          <thead><tr><th>Function</th><th>Talos</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Mobile base</td><td class="v">Tracked chassis</td></tr>
+            <tr><td class="k">Cue sensor</td><td class="v">Remote ID rx</td></tr>
+            <tr><td class="k">Track sensor</td><td class="v">RGB + IR</td></tr>
+            <tr><td class="k">Slewing mount</td><td class="v">2-axis servo turret</td></tr>
+            <tr><td class="k">Local awareness</td><td class="v">Lidar (sim)</td></tr>
+            <tr><td class="k">Operator link</td><td class="v">WebSocket + MJPEG</td></tr>
+            <tr><td class="k">Effector</td><td class="v">None — by choice</td></tr>
+          </tbody>
+        </table>
+        <dl class="kv" style="margin-top:16px">
+          <div><dt>Patriot interceptor</dt><dd>~$4.2 M</dd></div>
+          <div><dt>Shahed-class drone</dt><dd>~$20 k</dd></div>
+          <div><dt>Gepard burst</dt><dd>~$5 k</dd></div>
+          <div><dt>This whole robot</dt><dd>hobby budget</dd></div>
+        </dl>
+      </div>
+    </div>
+    <p class="caption">Sources —
+      <a href="https://en.wikipedia.org/wiki/Northrop_Grumman_M-ACE">M-ACE</a> ·
+      <a href="https://breakingdefense.com/2023/04/the-latest-counter-uas-system-targets-drones-with-dual-defeat-kinetics-and-ew/">M-LIDS turret and sensors</a> ·
+      <a href="https://euro-sd.com/2025/01/articles/42198/vehicle-mounted-anti-drone-solutions/">vehicle-mounted counter-UAS overview</a> ·
+      <a href="https://euromaidanpress.com/2025/07/20/ukraine-drone-defense/">Gepard against Shaheds</a> ·
+      <a href="https://drone-warfare.com/counter-uas/countering-the-shahed-136/">interception cost comparison</a> ·
+      <a href="https://www.forbes.com/sites/davidhambling/2025/09/10/why-some-anti-drone-artillery-comes-at-a-sky-high-price/">the price of anti-drone artillery</a>
+    </p>
   </section>
 
   <section id="system">
