@@ -14,6 +14,9 @@ the turret inside its range.
 - **CAD viewer** — the chassis tub, the Jetson mounting platform and the Jetson developer
   kit, in interactive 3D. Geometry is exported from the project CAD, quantized to 16-bit
   coordinates and embedded in the page, so nothing is fetched at runtime.
+- **Remote ID cueing (planned)** — an ESP32-C6 receiver decodes drone Remote ID broadcasts so
+  the Jetson can point the turret before the camera sees the target; indoor stand demo with a
+  test transmitter, outdoor GPS-aimed version on video.
 - Tracking pipeline, turret control, system architecture, bill of materials and build log.
 
 ## Running it

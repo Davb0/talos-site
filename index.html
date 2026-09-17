@@ -227,6 +227,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <a href="#build">First build</a>
       <a href="#tracking">Tracking</a>
       <a href="#turret">Turret</a>
+      <a href="#detect">Remote ID</a>
       <a href="#system">System</a>
       <a href="#cad">CAD</a>
       <a href="#hardware">Hardware</a>
@@ -244,7 +245,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <p class="lede">You click a target once in the video feed. From then on the turret keeps it
       centred by itself, and when the target runs past the edge of the turret's reach,
       <b>the whole chassis turns to catch up</b>. Two cameras, a lidar, and a PID loop that
-      took three rewrites to stop shaking.</p>
+      took three rewrites to stop shaking. Next, a <b>Remote ID receiver</b> that tells the turret
+      where to look before the camera has seen anything.</p>
 
     <dl class="specstrip">
       <div><dt>Frame</dt><dd>640×360 · 20 fps</dd></div>
@@ -252,6 +254,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <div><dt>Lidar</dt><dd>Simulated</dd></div>
       <div><dt>Telemetry</dt><dd>10 Hz</dd></div>
       <div><dt>Drive</dt><dd>2 × 12 V tracks</dd></div>
+      <div><dt>Cueing</dt><dd>Remote ID · planned</dd></div>
     </dl>
 
     <div class="console">
@@ -280,9 +283,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <p>Talos started as a competition build and never stopped. What began as a rushed
         prototype is now a platform with a rewritten vision stack, a machined chassis and a
         migration to real edge-compute hardware in progress.</p>
-      <p>The end goal is a miniature SPAA: a small, mobile, ground-to-air system that finds
-        something flying, keeps the turret on it, and — eventually — does something about it.
-        Everything commercial in this space is either a stationary tripod camera or a
+      <p>The goal is a small, mobile, ground-to-air system that finds something flying and keeps
+        the turret on it — detection and tracking, nothing more. Everything commercial in this space is either a stationary tripod camera or a
         cost-prohibitive UGV with a closed ecosystem. This is the accessible version: a Pi-class
         computer, off-the-shelf servos, and a chassis you can bolt anything onto.</p>
     </div>
@@ -303,9 +305,9 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       </div>
       <div class="step">
         <div class="num">STEP 03</div>
-        <h3>Intercept</h3>
-        <p>An airsoft launcher on the turret, plus the ballistics to aim it at something moving
-          through the air rather than at a point on the screen.</p>
+        <h3>Detect</h3>
+        <p>Listen for the Remote ID that drones broadcast and use its position to point the
+          turret at a drone before the camera has picked it up.</p>
         <span class="status plan">Planned</span>
       </div>
     </div>
@@ -452,6 +454,106 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           <div><dt>Assist turn speed</dt><dd>0.40</dd></div>
         </dl>
       </div>
+    </div>
+  </section>
+
+  <section id="detect">
+    <div class="shead"><h2>Knowing where to look</h2><span class="n">REMOTE ID</span></div>
+    <div class="split">
+      <div class="prose">
+        <p>The camera can only track what it can already see, and a small drone a long way off is
+          a few pixels against the sky. But drones already announce themselves: in the US and the
+          EU, most drones are required to broadcast <b>Remote ID</b>, meaning an identifier, position,
+          altitude, speed, heading and the pilot's location, openly over Bluetooth and Wi-Fi.
+          Anyone is allowed to receive it.</p>
+        <p>An ESP32-C6 on the robot listens for those broadcasts, decodes them and passes them to
+          the Jetson over USB. The Jetson subtracts the robot's own GPS position, turns the
+          difference into a bearing and an elevation, takes away the robot's heading from the IMU,
+          and slews the turret there.</p>
+        <p>Remote ID only gives a rough position. GPS is off by a few metres at both ends and the
+          broadcast updates about once a second, which is too coarse to track with but good enough
+          to get the drone into the camera frame. From there the existing tracker takes over. If
+          the camera loses the target, the turret falls back to the Remote ID bearing.</p>
+        <p>This only works for drones that broadcast. Drones under 250&nbsp;g and many home-built
+          FPV quads don't, so the camera stays the main sensor. The receiver doesn't transmit
+          anything; the project detects and tracks, nothing more.</p>
+      </div>
+      <div class="panel">
+        <h3>Receiver</h3>
+        <dl class="kv">
+          <div><dt>Board</dt><dd>ESP32-C6 Super Mini</dd></div>
+          <div><dt>Antenna</dt><dd>On-board ceramic</dd></div>
+          <div><dt>Link to Jetson</dt><dd>USB serial</dd></div>
+          <div><dt>Standard</dt><dd>ASTM F3411 · ASD-STAN</dd></div>
+          <div><dt>Heard over</dt><dd>BLE 4 · BLE 5 LR · Wi-Fi</dd></div>
+          <div><dt>Update rate</dt><dd>~1 Hz</dd></div>
+          <div><dt>Robot pose</dt><dd>GPS + BNO085 IMU</dd></div>
+          <div><dt>Status</dt><dd>Planned</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <figure>
+      <div class="figscroll">
+        <svg viewBox="0 0 900 240" role="img" aria-label="Remote ID cueing: a test transmitter broadcasts over Bluetooth and Wi-Fi to the ESP32-C6 receiver, which sends it over USB to the Jetson; the Jetson turns GPS positions into a pan and tilt setpoint, the turret slews, and the camera tracker locks on. If the camera loses the target the turret falls back to the Remote ID bearing.">
+          <g font-family="JetBrains Mono, monospace">
+            <defs>
+              <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--ink-2)"/>
+              </marker>
+            </defs>
+
+            <rect x="15" y="40" width="130" height="64" rx="2" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.4"/>
+            <text x="80" y="67" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Drone</text>
+            <text x="80" y="85" text-anchor="middle" font-size="9.5" fill="var(--muted)">broadcasts Remote ID</text>
+
+            <rect x="200" y="40" width="130" height="64" rx="2" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+            <text x="265" y="67" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">ESP32-C6</text>
+            <text x="265" y="85" text-anchor="middle" font-size="9.5" fill="var(--muted)">decodes Open Drone ID</text>
+
+            <rect x="385" y="40" width="130" height="64" rx="2" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+            <text x="450" y="67" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Jetson</text>
+            <text x="450" y="85" text-anchor="middle" font-size="9.5" fill="var(--muted)">GPS + IMU → pan/tilt</text>
+
+            <rect x="570" y="40" width="130" height="64" rx="2" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+            <text x="635" y="67" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Turret slews</text>
+            <text x="635" y="85" text-anchor="middle" font-size="9.5" fill="var(--muted)">toward the bearing</text>
+
+            <rect x="755" y="40" width="130" height="64" rx="2" fill="var(--surface-2)" stroke="var(--good)" stroke-width="1.4"/>
+            <text x="820" y="67" text-anchor="middle" font-size="12" font-weight="600" fill="var(--good)">Camera locks</text>
+            <text x="820" y="85" text-anchor="middle" font-size="9.5" fill="var(--muted)">KCF + colour memory</text>
+
+            <path d="M 145 72 L 192 72" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#ah3)"/>
+            <text x="172" y="62" text-anchor="middle" font-size="9.5" fill="var(--accent)">radio</text>
+            <path d="M 330 72 L 377 72" fill="none" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ah3)"/>
+            <text x="357" y="62" text-anchor="middle" font-size="9.5" fill="var(--ink-2)">USB</text>
+            <path d="M 515 72 L 562 72" fill="none" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ah3)"/>
+            <text x="542" y="62" text-anchor="middle" font-size="9.5" fill="var(--ink-2)">setpoint</text>
+            <path d="M 700 72 L 747 72" fill="none" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ah3)"/>
+            <text x="727" y="62" text-anchor="middle" font-size="9.5" fill="var(--ink-2)">in frame</text>
+
+            <path d="M 820 104 L 820 136 L 450 136 L 450 112" fill="none" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ah3)"/>
+            <text x="635" y="154" text-anchor="middle" font-size="10.5" fill="var(--warn)">camera loses it → back to the Remote ID bearing</text>
+
+            <text x="15" y="196" font-size="10" letter-spacing="1.6" fill="var(--muted)">OUTDOOR</text>
+            <text x="130" y="196" font-size="10.5" fill="var(--ink-2)">GPS fix on both ends — the turret aims straight at the drone</text>
+            <text x="15" y="222" font-size="10" letter-spacing="1.6" fill="var(--muted)">INDOOR</text>
+            <text x="130" y="222" font-size="10.5" fill="var(--ink-2)">no GPS — a detection starts the search sweep and the camera finds it</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Planned cueing chain, not built yet. The broadcast gets the turret pointing
+        roughly the right way, and the camera does the actual tracking.</figcaption>
+    </figure>
+
+    <div class="prose" style="margin-top:30px">
+      <p><b>Demonstrating it.</b> The competition is held indoors at a stand, and GPS doesn't work
+        indoors. So the live demo uses a stand-in drone: an ESP32 with a GPS module broadcasting a
+        test ID at low power, mounted on a stick with a bright marker the camera can pick out. The
+        receiver only reacts to that test ID, so other devices in the hall can't trigger it. When
+        the broadcast is picked up the turret starts searching, the camera locks on, and whoever
+        is holding the stick can walk it around. The full outdoor version, aimed by GPS, is shown
+        on video.</p>
     </div>
   </section>
 
@@ -644,7 +746,9 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           that buzzes.</p>
         <p><b>Next platform:</b> a Jetson Orin Nano with <span class="mono">Jetson.GPIO</span> for
           the motors, the same PCA9685 over I²C for the servos, and an IMX678 camera through
-          GStreamer — plus a real RPLIDAR in place of the synthesised one.</p>
+          GStreamer — plus a real RPLIDAR in place of the synthesised one. An ESP32-C6 on USB
+          listens for Remote ID, and a GPS module with a BNO085 IMU gives the robot its own
+          position and heading for aiming outdoors.</p>
       </div>
     </div>
   </section>
