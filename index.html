@@ -223,7 +223,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
   <div class="wrap">
     <div class="mark">PROJECT<span>·</span>TALOS</div>
     <nav>
-      <a href="#mission">Mission</a>
+      <a href="#mission">Why</a>
+      <a href="#why">The problem</a>
       <a href="#build">First build</a>
       <a href="#tracking">Tracking</a>
       <a href="#turret">Turret</a>
@@ -242,11 +243,12 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <p class="eyebrow">Mobile ground-to-air tracking platform</p>
     <h1>TALOS</h1>
     <p class="sub">A tracked robot that watches the sky.</p>
-    <p class="lede">You click a target once in the video feed. From then on the turret keeps it
-      centred by itself, and when the target runs past the edge of the turret's reach,
-      <b>the whole chassis turns to catch up</b>. Two cameras, a lidar, and a PID loop that
-      took three rewrites to stop shaking. Next, a <b>Remote ID receiver</b> that tells the turret
-      where to look before the camera has seen anything.</p>
+    <p class="lede">Two drone sightings shut Gatwick for 33 hours in 2018 — a thousand flights,
+      140,000 passengers stranded. Copenhagen lost four hours in 2025; Munich lost a night. The
+      equipment that finds the drone is priced for airports. <b>This is the workbench version:</b>
+      a tracked chassis, a two-axis camera turret that holds a flying target on its own, and a
+      receiver for the ID that every legal drone is required to broadcast — so the turret knows
+      where to look <b>before the camera has seen anything</b>.</p>
 
     <dl class="specstrip">
       <div><dt>Frame</dt><dd>640×360 · 20 fps</dd></div>
@@ -278,15 +280,29 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
   </div>
 
   <section id="mission">
-    <div class="shead"><h2>Where this is going</h2><span class="n">MISSION</span></div>
+    <div class="shead"><h2>Why I built it</h2><span class="n">MISSION</span></div>
     <div class="prose">
-      <p>Talos started as a competition build and never stopped. What began as a rushed
-        prototype is now a platform with a rewritten vision stack, a machined chassis and a
-        migration to real edge-compute hardware in progress.</p>
-      <p>The goal is a small, mobile, ground-to-air system that finds something flying and keeps
-        the turret on it — detection and tracking, nothing more. Everything commercial in this space is either a stationary tripod camera or a
-        cost-prohibitive UGV with a closed ecosystem. This is the accessible version: a Pi-class
-        computer, off-the-shelf servos, and a chassis you can bolt anything onto.</p>
+      <p>I started with the part that looked hardest: keeping a camera pointed at something
+        flying. That took three rewrites of the control loop, a tracker that remembers what the
+        target looked like, and a chassis that turns when the turret runs out of room. It works —
+        you click a flying object in the video feed and the turret holds it.</p>
+      <p>Then the flaw I had built in became obvious. <b>Somebody has to click.</b> The robot was
+        blind until a human had already spotted the target, and a drone a couple of hundred metres
+        out is a speck against a bright sky. By the time you can see it, it is already over
+        whatever it came for. A tracker that needs to be told where to look is a demo, not a
+        sensor.</p>
+      <p>So I went looking for how something this small could know about a drone before seeing it.
+        Radar is out — the price, the licensing, the complexity. Microphone arrays are still
+        research projects. And then I found the thing that reframed the whole project: since 2024,
+        in both the EU and the US, <b>a drone is legally required to announce itself</b>. It
+        broadcasts an identifier, its position, its altitude and its pilot's location, in the
+        clear, over Bluetooth and Wi-Fi, for anyone to receive. A chip that costs about 50 lei can
+        hear it.</p>
+      <p>That turns Talos from a turret that tracks into a sensor that finds and then tracks — and
+        it is the part nobody expects. Everything commercial in this space is either a stationary
+        tripod camera or a cost-prohibitive UGV with a closed ecosystem. This is the accessible
+        version: a Pi-class computer, off-the-shelf servos, and a chassis you can bolt anything
+        onto.</p>
     </div>
     <div class="steps">
       <div class="step">
@@ -313,21 +329,121 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     </div>
   </section>
 
+  <section id="why">
+    <div class="shead"><h2>The problem this fits</h2><span class="n">WHY IT MATTERS</span></div>
+    <div class="split">
+      <div class="prose">
+        <p>A drone over a runway is not a nuisance, it is a stoppage. Nobody can prove the sky is
+          clear, so everything stops until somebody decides it is. Gatwick lost 33 hours to two
+          sightings in December 2018 and cancelled around a thousand flights. Copenhagen shut for
+          roughly four hours in September 2025. Munich suspended flights the following month, and
+          about three thousand passengers spent the night in the terminal.</p>
+        <p>The same pattern shows up wherever a small aircraft can reach something valuable.
+          Drones drop phones and drugs into prison yards — 479 incidents in US federal prisons in
+          2024, up from 23 in 2018, and 1,712 recorded across England and Wales in a single year.
+          They ground firefighting aircraft: the US Forest Service counted 218 drone incursions
+          over wildfires in 2025, 184 of them over two fires, more than the previous seven years
+          put together. Each one stops the water drops while the fire keeps moving.</p>
+        <p>It is not abstract here either. On 13 September 2025 a Russian Geran drone crossed into
+          Romanian airspace during a strike on the Danube ports. Two F-16s went up from Fetești,
+          RO-Alert went out across northern Tulcea county, and debris came down at Periprava, about
+          a kilometre from the border. Romanian jets have been scrambled repeatedly since.</p>
+        <p>What all of these have in common is not firepower. It is <b>knowing</b>: what is up
+          there, where it is, and whose it is. That is a sensor problem, and sensors can be
+          cheap.</p>
+      </div>
+      <div class="panel">
+        <h3>On the record</h3>
+        <table class="data">
+          <tbody>
+            <tr><td class="k">Gatwick · Dec 2018</td><td class="v">33 h closed</td></tr>
+            <tr><td class="k">— flights cancelled</td><td class="v">~1,000</td></tr>
+            <tr><td class="k">Copenhagen · Sep 2025</td><td class="v">~4 h closed</td></tr>
+            <tr><td class="k">Munich · Oct 2025</td><td class="v">~3,000 pax</td></tr>
+            <tr><td class="k">Romania · Sep 2025</td><td class="v">F-16s · debris</td></tr>
+            <tr><td class="k">US federal prisons · 2024</td><td class="v">479 incidents</td></tr>
+            <tr><td class="k">England &amp; Wales · 24/25</td><td class="v">1,712 incidents</td></tr>
+            <tr><td class="k">US wildfires · 2025</td><td class="v">218 incursions</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">ROLE 01</div>
+        <h3>Airfields</h3>
+        <p>A sighting is a rumour until something confirms it. A unit that hears the broadcast and
+          swings a camera onto it turns a rumour into a picture and a serial number.</p>
+      </div>
+      <div class="step">
+        <div class="num">ROLE 02</div>
+        <h3>Prison yards</h3>
+        <p>The drops happen at night, over the same few metres of wall, week after week. Cheap
+          enough to park one on a roof, and it records what arrived and roughly where from.</p>
+      </div>
+      <div class="step">
+        <div class="num">ROLE 03</div>
+        <h3>Fire and rescue</h3>
+        <p>One hobby drone inside a restricted zone grounds every aircraft over the fire. This is
+          mobile: it rides to the incident and watches the airspace the crews need.</p>
+      </div>
+      <div class="step">
+        <div class="num">ROLE 04</div>
+        <h3>Restricted sites</h3>
+        <p>Substations, ports, fuel depots, gas platforms — fixed no-fly zones with long fences and
+          nobody permanently watching the sky above them.</p>
+      </div>
+      <div class="step">
+        <div class="num">ROLE 05</div>
+        <h3>Protected nature</h3>
+        <p>Drone flights are restricted over reserves like the Danube Delta because they scatter
+          nesting birds. Rangers currently find out when they hear one.</p>
+      </div>
+      <div class="step">
+        <div class="num">ROLE 06</div>
+        <h3>Events</h3>
+        <p>Stadiums, concerts and public gatherings get temporary no-fly zones and have no way to
+          tell a licensed press drone from an unannounced one.</p>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:34px">
+      <p><b>And what it honestly can't do.</b> A drone that doesn't broadcast is invisible to the
+        receiver: toy drones under 250&nbsp;g, home-built FPV quads, and anything military — the
+        Geran over Tulcea announced nothing. Those are exactly the cases where the camera has to
+        earn its place, which is why tracking came first and stays the core of the project. Talos
+        detects and tracks. It doesn't stop anything, and it isn't armed.</p>
+    </div>
+    <p class="caption">Sources —
+      <a href="https://en.wikipedia.org/wiki/Gatwick_Airport_drone_incident">Gatwick 2018</a> ·
+      <a href="https://www.aljazeera.com/amp/news/2025/9/22/copenhagen-airport-shut-after-sighting-of-unidentified-drones">Copenhagen</a> ·
+      <a href="https://www.aerotime.aero/articles/munich-airport-reopens-latest-european-drone-breach">Munich</a> ·
+      <a href="https://kyivindependent.com/romania-scrambles-f-16s-as-russian-drone-crosses-ukraines-danube-river-border/">Romania, F-16 scramble</a> ·
+      <a href="https://edmo.eu/publications/false-narratives-analysis-of-russian-drone-incidents-in-romanian-airspace/">Romanian incidents, EDMO</a> ·
+      <a href="https://www.cnn.com/2026/05/03/us/drone-deliveries-contraband-prison-inmates">prison drops, CNN</a> ·
+      <a href="https://nij.ojp.gov/topics/articles/addressing-contraband-prisons-and-jails-threat-drone-deliveries-grows">National Institute of Justice</a> ·
+      <a href="https://www.fs.usda.gov/about-agency/features/busy-airspace">US Forest Service</a> ·
+      <a href="https://www.faa.gov/newsroom/faa-ends-discretionary-enforcement-policy-drone-remote-identification">FAA Remote ID enforcement</a> ·
+      <a href="https://www.sphengineering.com/news/drone-remote-id-requirements">EASA &amp; FAA Remote ID rules</a>
+    </p>
+  </section>
+
   <section id="build">
     <div class="shead"><h2>The first build</h2><span class="n">PROTOTYPE</span></div>
     <div class="prose">
-      <p>The original Talos was put together for a freestyle robotics competition — the category
-        with no fixed brief, where you turn up with whatever you built and explain why it should
+      <p>I put the first Talos together for a freestyle robotics competition — the category with
+        no fixed brief, where you turn up with whatever you built and explain why it should
         exist. It was made out of whatever was lying around: a tracked chassis, two 12&nbsp;V motors
         wired to point in opposite directions, a Raspberry Pi, a pair of MG90S servos on a bracket,
         and a lithium pack soldered together by hand.</p>
-      <p>Most of it was decided in the last week. The turret bracket was sized to the servos that
+      <p>Most of it I decided in the last week. The turret bracket was sized to the servos that
         were in the box rather than the other way round; the tracking ran on a Flask page instead of
         an application because a browser was the fastest thing to put a video feed into; the servo
         commands went out through an Arduino because that is what was already wired up.</p>
       <p>It worked on the day. Not smoothly — but you could click a flying object in the video feed
         and watch the turret hold it, which was the whole argument. That was enough.</p>
-      <p>The interesting part is what happened afterwards: it didn't get taken apart for the next
+      <p>The interesting part is what happened afterwards: I didn't take it apart for the next
         project. Everything on this page is the second life of that prototype. The Arduino link
         became a PCA9685 on I²C, the Flask page became a FastAPI server and a PyQt6 application,
         CSRT became KCF with a colour memory behind it, the proportional-only servo loop became two
@@ -461,11 +577,13 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <div class="shead"><h2>Knowing where to look</h2><span class="n">REMOTE ID</span></div>
     <div class="split">
       <div class="prose">
-        <p>The camera can only track what it can already see, and a small drone a long way off is
-          a few pixels against the sky. But drones already announce themselves: in the US and the
-          EU, most drones are required to broadcast <b>Remote ID</b>, meaning an identifier, position,
-          altitude, speed, heading and the pilot's location, openly over Bluetooth and Wi-Fi.
-          Anyone is allowed to receive it.</p>
+        <p>Almost nobody knows this part, which is why it is the best thing in the project. Ask
+          anyone and they will tell you a drone in the sky is anonymous. It isn't. Since
+          <b>1 January 2024</b> in the EU, and enforced from <b>16 March 2024</b> in the US, a
+          registered drone has to carry <b>Remote ID</b> and broadcast an identifier, its position,
+          altitude, speed, heading and its pilot's location — unencrypted, over Bluetooth and
+          Wi-Fi, several times a minute. It is a number plate you can read from a distance, and
+          anyone is allowed to receive it.</p>
         <p>An ESP32-C6 on the robot listens for those broadcasts, decodes them and passes them to
           the Jetson over USB. The Jetson subtracts the robot's own GPS position, turns the
           difference into a bearing and an elevation, takes away the robot's heading from the IMU,

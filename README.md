@@ -17,6 +17,8 @@ the turret inside its range.
 - **Remote ID cueing (planned)** — an ESP32-C6 receiver decodes drone Remote ID broadcasts so
   the Jetson can point the turret before the camera sees the target; indoor stand demo with a
   test transmitter, outdoor GPS-aimed version on video.
+- **Why it matters** — documented drone incursions (Gatwick, Copenhagen, Munich, Tulcea,
+  prisons, wildfires) with sources, plus six realistic roles for a cheap detect-and-track unit.
 - Tracking pipeline, turret control, system architecture, bill of materials and build log.
 
 ## Running it
