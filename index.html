@@ -348,8 +348,10 @@ details.deep[open]{padding-bottom:14px}
         over Bluetooth and Wi-Fi, giving their position and their pilot's location. A chip costing
         about 50 lei can listen in, so the robot can be told where to look before the camera can
         see anything.</li>
-      <li><b>What works now.</b> The camera tracking, the moving mount and the driving. The
-        listening part is designed and the parts are picked, but not built yet.</li>
+      <li><b>What works now.</b> The camera tracking, the moving mount and the driving. Today
+        somebody starts it by pressing the target once on the video. Two things are being added
+        to remove that step: the listening described above, and a detector that recognises drones
+        in the picture by itself.</li>
       <li><b>Where it goes.</b> A radar can see a long way but only reports a blip. This robot
         is the part that goes and looks, so a radar could send it out to identify whatever it
         found.</li>
@@ -401,8 +403,8 @@ details.deep[open]{padding-bottom:14px}
       <div class="step">
         <div class="num">STEP 03</div>
         <h3>Detect</h3>
-        <p>Listen for the Remote ID that drones broadcast and use its position to point the
-          turret at a drone before the camera has picked it up.</p>
+        <p>Listen for the Remote ID that drones broadcast, and let a YOLO detector find drones
+          in the picture, so nobody has to spot the target first.</p>
         <span class="status plan">Planned</span>
       </div>
       <div class="step">
@@ -575,6 +577,15 @@ details.deep[open]{padding-bottom:14px}
     <div class="shead"><h2>The tracking</h2><span class="n">VISION</span></div>
     <div class="prose plain">
       <p><b>In plain words:</b> you click the flying object once on the video, and from then on the software follows it by itself. It also memorises the colours of what you clicked, so when something passes in front of the target it can find it again instead of giving up. When it does lose it, it keeps sweeping the way the target was heading, because that is usually where it comes back.</p>
+      <p><b>Being replaced: the pressing part.</b> Today a person has to spot the drone and
+        click it once, and only then does the robot take over. That is the weak link, and a
+        detector of the YOLO family is going in to remove it: a neural network looks at the frame,
+        marks what it recognises, and hands the box to the tracker, so the robot proposes the
+        target itself. The detector is the expensive part and would run a few times a second,
+        while the tracker described above, which is cheap, holds the target in between. It also
+        answers the question radar cannot, which is whether the contact is a drone or a bird. It
+        needs the Jetson to run at a useful speed, so it lands with that hardware.</p>
+      <p><span class="status wip">In progress</span></p>
     </div>
 
     <details class="deep">
@@ -586,8 +597,9 @@ details.deep[open]{padding-bottom:14px}
           MOG2 background subtraction running behind it to find things that move in the first
           place. On its own KCF loses the target constantly, especially when somebody walks
           between the camera and the thing you were following.</p>
-        <p>So the tracker also remembers what the target <em>looked</em> like. On the initial click
-          it learns an HSV colour histogram of the region, and when KCF fails it back-projects that
+        <p>So the tracker also remembers what the target <em>looked</em> like. On the initial
+          press, which is what the detector will later replace, it learns an HSV colour histogram
+          of the region, and when KCF fails it back-projects that
           histogram over the frame to find the target again within a search radius around its last
           known position.</p>
         <p>Three sanity checks reject the classic failure where the tracker quietly latches onto
