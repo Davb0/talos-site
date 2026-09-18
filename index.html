@@ -162,7 +162,7 @@ dl.kv dt{color:var(--ink-2)}
 dl.kv dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
 
 /* ── mission steps ──────────────────────────────────────────────────── */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:38px;
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0;margin-top:38px;
   border-top:1px solid var(--rule)}
 @media (max-width:760px){.steps{grid-template-columns:1fr}}
 .step{padding:22px 24px 26px;border-left:1px solid var(--rule);position:relative}
@@ -340,6 +340,9 @@ details.deep[open]{padding-bottom:12px}
         see anything.</li>
       <li><b>What works now.</b> The camera tracking, the moving mount and the driving. The
         listening part is designed and the parts are picked, but not built yet.</li>
+      <li><b>Where it goes.</b> A radar can see a long way but only reports a blip. This robot
+        is the part that goes and looks, so a radar could send it out to identify whatever it
+        found.</li>
       <li><b>What it is not.</b> It carries nothing that can harm a drone. It finds them and
         watches them, and that is all it is meant to do.</li>
     </ul>
@@ -391,6 +394,13 @@ details.deep[open]{padding-bottom:12px}
         <p>Listen for the Remote ID that drones broadcast and use its position to point the
           turret at a drone before the camera has picked it up.</p>
         <span class="status plan">Planned</span>
+      </div>
+      <div class="step">
+        <div class="num">STEP 04</div>
+        <h3>Investigate</h3>
+        <p>Take the cue from something else. A radar sees a contact and the robot drives out to
+          look at it, because radar says something is there and a camera says what it is.</p>
+        <span class="status plan">The bigger idea</span>
       </div>
     </div>
   </section>
@@ -868,6 +878,24 @@ details.deep[open]{padding-bottom:12px}
           knowing where to look, and keeping something pointed at it while it moves. That is
           exactly what a $50 receiver, a $10 IMU and a camera on two servos are for, and it is
           why I kept the project on the sensor side.</p>
+        <p><b>The bigger idea: radar finds it, the robot identifies it.</b> A radar sees a long
+          way and through weather, but what it hands you is a blip: something is out there, at
+          this bearing, at this range. It cannot tell you whether that is a drone, a bird or a
+          plastic bag on the wind. A camera can tell you exactly that, but only where it happens
+          to be pointing, which is why fixed camera towers watch one patch of sky and nothing
+          else.</p>
+        <p>Put the two together and each covers the other's blind spot. The radar hands over a
+          bearing and a range, the robot drives out that way, points the turret where it was told,
+          reads the Remote ID if the aircraft is broadcasting one, and sends back a picture of
+          whatever is actually there. One radar watching a wide area, a couple of cheap robots
+          dispatched to whatever it finds. This is also the reason the driving has to become
+          autonomous: a unit that has to be dispatched has to be able to take itself there.</p>
+        <p>The radar itself is the expensive part, well past what this project can buy, so the
+          realistic version plugs into one a site already has. Airfields, ports and military units
+          have radar and no cheap way to go and look. A smaller version of the same idea costs
+          nothing extra: several of these robots sharing what they hear, so a contact picked up by
+          one unit sends its neighbour to investigate.</p>
+
         <p><b>And the limit, stated plainly.</b> Remote ID is a civil aviation rule. A Shahed
           broadcasts nothing, and the drone that crossed into Tulcea announced nothing. Against
           military drones the Remote ID half of this design is worthless and only the camera and
@@ -928,6 +956,9 @@ details.deep[open]{padding-bottom:12px}
           closest obstacle, is broadcast ten times a second. The lidar scan, which is far heavier, goes out five
           times a second on the same socket. The app sends back clicks, turret nudges, drive
           commands and resets.</p>
+        <p>The same idea applies on the ground. The operator app already draws a radar plot from
+          the lidar, and a contact on it is exactly the kind of cue that would send the robot to
+          look. Today it only watches for obstacles.</p>
         <p>How much of the robot's surroundings that scan will actually cover is still an open
           question. The unit isn't fitted yet, so what the radar draws today is a synthesised
           sweep standing in for a real one, and the scan area gets settled when the hardware does.</p>
