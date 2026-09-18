@@ -224,15 +224,25 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 .tldr li b{color:var(--ink);font-weight:500}
 
 /* ── collapsible technical detail ───────────────────────────────────── */
-details.deep{border-top:1px solid var(--rule);margin-top:24px}
-details.deep>summary{cursor:pointer;list-style:none;padding:14px 0;font-family:var(--fx-mono);
-  font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
-  display:flex;align-items:center;justify-content:space-between;gap:12px}
+details.deep{margin-top:28px}
+details.deep>summary{cursor:pointer;list-style:none;padding:17px 20px;
+  border:1px solid var(--rule-2);background:var(--surface);
+  font-family:var(--fx-display);font-variation-settings:"wdth" 100;font-weight:700;
+  font-size:16.5px;letter-spacing:.005em;color:var(--ink);
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
 details.deep>summary::-webkit-details-marker{display:none}
-details.deep>summary::after{content:"+";font-size:16px;line-height:1;color:var(--accent)}
+details.deep>summary::after{content:"+";flex:0 0 auto;width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--accent);color:var(--accent);font-family:var(--fx-mono);font-weight:600;
+  font-size:19px;line-height:25px;text-align:center}
 details.deep[open]>summary::after{content:"\2212"}
-details.deep>summary:hover{color:var(--accent)}
-details.deep[open]{padding-bottom:12px}
+details.deep>summary:hover{border-color:var(--accent);color:var(--accent)}
+details.deep>summary:hover::after{background:var(--accent);color:var(--surface)}
+details.deep[open]>summary{border-bottom-color:var(--accent);margin-bottom:6px}
+details.deep[open]{padding-bottom:14px}
+@media (max-width:620px){
+  details.deep>summary{font-size:15px;padding:15px 16px;gap:12px}
+  details.deep>summary::after{width:25px;height:25px;font-size:17px;line-height:22px}
+}
 .plain{font-size:17.5px}
 .plain b{font-weight:500;color:var(--ink)}
 
