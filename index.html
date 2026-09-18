@@ -391,8 +391,8 @@ details.deep[open]{padding-bottom:12px}
       <div class="step">
         <div class="num">STEP 03</div>
         <h3>Detect</h3>
-        <p>Listen for the Remote ID that drones broadcast, and let a YOLO detector find drones
-          in the picture, so nobody has to spot the target first.</p>
+        <p>Listen for the Remote ID that drones broadcast and use its position to point the
+          turret at a drone before the camera has picked it up.</p>
         <span class="status plan">Planned</span>
       </div>
       <div class="step">
@@ -565,13 +565,6 @@ details.deep[open]{padding-bottom:12px}
     <div class="shead"><h2>The tracking</h2><span class="n">VISION</span></div>
     <div class="prose plain">
       <p><b>In plain words:</b> you click the flying object once on the video, and from then on the software follows it by itself. It also memorises the colours of what you clicked, so when something passes in front of the target it can find it again instead of giving up. When it does lose it, it keeps sweeping the way the target was heading, because that is usually where it comes back.</p>
-      <p><b>Next: the software does the clicking.</b> A neural network of the YOLO family looks
-        at each frame and marks what it recognises, so instead of a person spotting the drone
-        first, the robot proposes the target itself. The detector is the slow, careful part, so it
-        would run a few times a second, and the existing tracker, which is fast and cheap, keeps
-        the box on the target in between. The same model is what separates a drone from a bird,
-        which is the thing radar cannot do. It needs the Jetson to run at a useful speed, so it
-        arrives with that hardware.</p>
     </div>
 
     <details class="deep">
