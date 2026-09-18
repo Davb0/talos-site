@@ -5,6 +5,10 @@ camera turret that holds a moving aerial target in frame while the chassis turns
 the turret inside its range.
 
 
+The page opens with a one-minute summary in plain language. Technical depth (vision pipeline,
+control loop, interfaces, CAD, parts list, build log) is folded into collapsible blocks so a
+visitor can read the argument without scrolling past the engineering.
+
 ## What's on the page
 
 - **Turret loop** — a live simulation of the pan/tilt PID loop, running the real constants

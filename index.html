@@ -213,6 +213,48 @@ figcaption{font-family:var(--fx-mono);font-size:11.5px;color:var(--muted);margin
 footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
   font-family:var(--fx-mono);font-size:11.5px;color:var(--muted);
   display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+/* ── read-this-first card ───────────────────────────────────────────── */
+.tldr{margin-top:46px;border:1px solid var(--rule-2);background:var(--surface);padding:24px 26px}
+.tldr h2{font-variation-settings:"wdth" 112;font-weight:800;font-size:clamp(21px,3.4vw,28px);
+  letter-spacing:-.01em}
+.tldr .eyebrow{margin-bottom:8px}
+.tldr ul{margin:16px 0 0;padding-left:20px}
+.tldr li{margin:0 0 9px;color:var(--ink-2);max-width:62ch}
+.tldr li:last-child{margin-bottom:0}
+.tldr li b{color:var(--ink);font-weight:500}
+
+/* ── collapsible technical detail ───────────────────────────────────── */
+details.deep{border-top:1px solid var(--rule);margin-top:24px}
+details.deep>summary{cursor:pointer;list-style:none;padding:14px 0;font-family:var(--fx-mono);
+  font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+details.deep>summary::-webkit-details-marker{display:none}
+details.deep>summary::after{content:"+";font-size:16px;line-height:1;color:var(--accent)}
+details.deep[open]>summary::after{content:"\2212"}
+details.deep>summary:hover{color:var(--accent)}
+details.deep[open]{padding-bottom:12px}
+.plain{font-size:17.5px}
+.plain b{font-weight:500;color:var(--ink)}
+
+/* ── phones ─────────────────────────────────────────────────────────── */
+@media (max-width:620px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  section{padding-top:54px}
+  .hero{padding:38px 0 8px}
+  .mast .wrap{gap:10px}
+  .mast nav{flex-wrap:nowrap;overflow-x:auto;gap:18px;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;width:100%}
+  .mast nav::-webkit-scrollbar{display:none}
+  .specstrip div{flex:1 1 44%;padding:12px 12px 12px 0}
+  .specstrip div:nth-child(odd){border-left:0;padding-left:0}
+  .readouts div{flex:1 1 33%;padding:8px 10px}
+  .panel{padding:16px 17px}
+  .tldr{padding:20px 18px}
+  .log article{padding:16px 0}
+  figure svg{min-width:560px}
+  .figscroll{padding:12px}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -280,6 +322,27 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     <p class="caption">Simulated target, real constants. The gains, deadzone, EMA and step clamp
       below are read straight out of <span class="mono">backend/config.py</span>.
       Move your pointer across the frame to fly the target yourself.</p>
+  </div>
+
+  <div class="tldr">
+    <p class="eyebrow">Start here</p>
+    <h2>The whole project in one minute</h2>
+    <ul>
+      <li><b>What it is.</b> A small tracked robot with a camera on a moving mount. Point it at
+        something flying and it keeps the camera on that thing by itself, turning its whole body
+        when the camera runs out of travel.</li>
+      <li><b>Why it exists.</b> Drones shut down airports, drop packages into prisons and ground
+        firefighting planes. The gear that spots them is built for airports and priced for them.
+        This is a version a student can build.</li>
+      <li><b>The part nobody expects.</b> By law, since 2024, drones have to announce themselves
+        over Bluetooth and Wi-Fi, giving their position and their pilot's location. A chip costing
+        about 50 lei can listen in, so the robot can be told where to look before the camera can
+        see anything.</li>
+      <li><b>What works now.</b> The camera tracking, the moving mount and the driving. The
+        listening part is designed and the parts are picked, but not built yet.</li>
+      <li><b>What it is not.</b> It carries nothing that can harm a drone. It finds them and
+        watches them, and that is all it is meant to do.</li>
+    </ul>
   </div>
 
   <section id="mission">
@@ -376,38 +439,38 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <div class="step">
         <div class="num">ROLE 01</div>
         <h3>Airfields</h3>
-        <p>A sighting is a rumour until something confirms it. A unit that hears the broadcast and
-          swings a camera onto it turns a rumour into a picture and a serial number.</p>
+        <p>A sighting is a rumour until something confirms it. This turns it into a picture and a
+          serial number.</p>
       </div>
       <div class="step">
         <div class="num">ROLE 02</div>
         <h3>Prison yards</h3>
-        <p>The drops happen at night, over the same few metres of wall, week after week. Cheap
-          enough to park one on a roof, and it records what arrived and roughly where from.</p>
+        <p>The drops happen at night, over the same stretch of wall, week after week. Cheap enough
+          to leave one on a roof.</p>
       </div>
       <div class="step">
         <div class="num">ROLE 03</div>
         <h3>Fire and rescue</h3>
-        <p>One hobby drone inside a restricted zone grounds every aircraft over the fire. This is
-          mobile: it rides to the incident and watches the airspace the crews need.</p>
+        <p>One hobby drone inside a restricted zone grounds every aircraft over the fire. This one
+          rides to the incident.</p>
       </div>
       <div class="step">
         <div class="num">ROLE 04</div>
         <h3>Restricted sites</h3>
-        <p>Substations, ports, fuel depots, gas platforms. Fixed no-fly zones with long fences and
-          nobody permanently watching the sky above them.</p>
+        <p>Substations, ports and fuel depots. Long fences, and nobody watching the sky above
+          them.</p>
       </div>
       <div class="step">
         <div class="num">ROLE 05</div>
         <h3>Protected nature</h3>
-        <p>Drone flights are restricted over reserves like the Danube Delta because they scatter
-          nesting birds. Rangers currently find out when they hear one.</p>
+        <p>Flights are restricted over reserves like the Danube Delta because drones scatter nesting
+          birds. Rangers only find out by ear.</p>
       </div>
       <div class="step">
         <div class="num">ROLE 06</div>
         <h3>Events</h3>
-        <p>Stadiums, concerts and public gatherings get temporary no-fly zones and have no way to
-          tell a licensed press drone from an unannounced one.</p>
+        <p>Stadiums and concerts get temporary no-fly zones, and no way to tell a press drone from
+          an uninvited one.</p>
       </div>
     </div>
 
@@ -417,6 +480,11 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         Geran over Tulcea announced nothing. Those are exactly the cases where the camera has to
         earn its place, which is why tracking came first and stays the core of the project. Talos
         detects and tracks. It doesn't stop anything, and it isn't armed.</p>
+    </div>
+
+    <details class="deep">
+      <summary>But why not just jam the drone?</summary>
+      <div class="prose">
       <p><b>The question everybody asks: why not jam it?</b> Technically the platform is already
         most of the way there. The hard half of any counter-drone system is finding the thing and
         keeping something pointed at it, and a transmitter is a small box. So the honest answer is
@@ -434,7 +502,8 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         student it would be illegal to own before it was ever switched on, and the legal version
         of this problem, telling an operator, a control room or a ranger <em>what is up there and
         whose it is</em>, is the part that was actually missing.</p>
-    </div>
+      </div>
+    </details>
     <p class="caption">Sources:
       <a href="https://en.wikipedia.org/wiki/Gatwick_Airport_drone_incident">Gatwick 2018</a> ·
       <a href="https://www.aljazeera.com/amp/news/2025/9/22/copenhagen-airport-shut-after-sighting-of-unidentified-drones">Copenhagen</a> ·
@@ -453,6 +522,13 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
 
   <section id="build">
     <div class="shead"><h2>The first build</h2><span class="n">PROTOTYPE</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> the first version was thrown together in a week out of parts that were already on the shelf, for a competition with no brief. It worked on the day, badly. Everything since has been rebuilding it properly.</p>
+    </div>
+
+    <details class="deep">
+      <summary>How the first one was thrown together</summary>
+
     <div class="prose">
       <p>I put the first Talos together for a freestyle robotics competition, the category with
         no fixed brief, where you turn up with whatever you built and explain why it should
@@ -472,10 +548,18 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         clamped PID loops, and the chassis stopped being whatever was lying around and started
         being drawn in CAD.</p>
     </div>
+    </details>
   </section>
 
   <section id="tracking">
     <div class="shead"><h2>The tracking</h2><span class="n">VISION</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> you click the flying object once on the video, and from then on the software follows it by itself. It also memorises the colours of what you clicked, so when something passes in front of the target it can find it again instead of giving up. When it does lose it, it keeps sweeping the way the target was heading, because that is usually where it comes back.</p>
+    </div>
+
+    <details class="deep">
+      <summary>The vision pipeline, in detail</summary>
+
     <div class="split">
       <div class="prose">
         <p>This was the hard part. A KCF correlation tracker does the frame-to-frame work, with
@@ -556,10 +640,18 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <figcaption>Tracker state machine. Colours are the ones the tracker actually draws on the
         annotated <span class="mono">/cam0</span> stream.</figcaption>
     </figure>
+    </details>
   </section>
 
   <section id="turret">
     <div class="shead"><h2>Turret &amp; chassis assist</h2><span class="n">CONTROL</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> the camera sits on two small motors, one turning it left and right, the other tilting it up and down. The software measures how far the target sits from the middle of the picture and nudges the motors to cancel that gap, twenty times a second. The first version shook so badly it looked broken, and four small changes fixed it.</p>
+    </div>
+
+    <details class="deep">
+      <summary>The control loop and its numbers, in detail</summary>
+
     <div class="split">
       <div class="prose">
         <p>Two independent PID loops, one for pan and one for tilt, both driven by how far the
@@ -593,10 +685,18 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         </dl>
       </div>
     </div>
+    </details>
   </section>
 
   <section id="drive">
     <div class="shead"><h2>Driving itself</h2><span class="n">AUTONOMY · WIP</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> the robot already swings its body round when the camera runs out of travel, so the mount never hits its end stop. Driving itself to a place, and getting around what is in the way, is the part still being built.</p>
+    </div>
+
+    <details class="deep">
+      <summary>The autonomy ladder, step by step</summary>
+
     <div class="split">
       <div class="prose">
         <p>A camera bolted to a tripod is a tripod. The reason Talos sits on tracks is that a
@@ -633,6 +733,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         </dl>
       </div>
     </div>
+    </details>
   </section>
 
   <section id="detect">
@@ -673,6 +774,9 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       </div>
     </div>
 
+
+    <details class="deep">
+      <summary>The cueing chain, and how it gets demonstrated</summary>
     <figure>
       <div class="figscroll">
         <svg viewBox="0 0 900 240" role="img" aria-label="Remote ID cueing: a test transmitter broadcasts over Bluetooth and Wi-Fi to the ESP32-C6 receiver, which sends it over USB to the Jetson. The Jetson turns GPS positions into a pan and tilt setpoint, the turret slews, and the camera tracker locks on. If the camera loses the target the turret falls back to the Remote ID bearing.">
@@ -735,6 +839,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
         is holding the stick can walk it around. The full outdoor version, aimed by GPS, is shown
         on video.</p>
     </div>
+    </details>
   </section>
 
   <section id="scale">
@@ -769,6 +874,10 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           the infrared channel carry over. Talos is a prototype of the sensing pattern, not a
           weapon, and I'd rather say that than let the comparison do work it hasn't earned.</p>
       </div>
+    </div>
+
+    <details class="deep">
+      <summary>The block-by-block comparison, and the sources</summary>
       <div class="panel">
         <h3>Same block diagram</h3>
         <table class="data">
@@ -790,7 +899,6 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           <div><dt>This whole robot</dt><dd>hobby budget</dd></div>
         </dl>
       </div>
-    </div>
     <p class="caption">Sources:
       <a href="https://en.wikipedia.org/wiki/Northrop_Grumman_M-ACE">M-ACE</a> ·
       <a href="https://breakingdefense.com/2023/04/the-latest-counter-uas-system-targets-drones-with-dual-defeat-kinetics-and-ew/">M-LIDS turret and sensors</a> ·
@@ -799,10 +907,18 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <a href="https://drone-warfare.com/counter-uas/countering-the-shahed-136/">interception cost comparison</a> ·
       <a href="https://www.forbes.com/sites/davidhambling/2025/09/10/why-some-anti-drone-artillery-comes-at-a-sky-high-price/">the price of anti-drone artillery</a>
     </p>
+    </details>
   </section>
 
   <section id="system">
     <div class="shead"><h2>How the pieces talk</h2><span class="n">SYSTEM</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> the robot runs a small program that serves its two camera feeds and its status over the network. On a laptop, a separate app shows the video, the readouts and a driving pad, and sends commands back. The whole thing also runs with no robot attached, which is how most of it gets written.</p>
+    </div>
+
+    <details class="deep">
+      <summary>Interfaces, rates and the signal chain, in detail</summary>
+
     <div class="split">
       <div class="prose">
         <p>A FastAPI server runs on the robot and a PyQt6 application runs on the operator's
@@ -922,11 +1038,19 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
       <figcaption>Signal chain from the pack to the operator. The compute board is mid-migration. The Pi 4B
         is what flew, the Jetson Orin Nano is what is next.</figcaption>
     </figure>
+    </details>
   </section>
 
 
   <section id="cad">
     <div class="shead"><h2>Drawn, then cut</h2><span class="n">CAD</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> the body is drawn on a computer and cut to size, rather than drilling holes into a hobby chassis. The turret sits directly over the centre of the robot, so the picture does not slide sideways when the robot turns. You can spin the parts below.</p>
+    </div>
+
+    <details class="deep">
+      <summary>The drawn parts and their dimensions</summary>
+
     <div class="prose">
       <p>The competition chassis was an off-the-shelf tracked base with holes drilled where they
         were needed. The current one is drawn properly: a 223.2 &times; 120.0&nbsp;mm tub that carries
@@ -959,10 +1083,18 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
     </div>
     <p class="caption">Geometry exported straight from the project's CAD, decimated to 16-bit
       coordinates for the web. Dimensions are the real part's bounding box in millimetres.</p>
+    </details>
   </section>
 
   <section id="hardware">
     <div class="shead"><h2>Hardware</h2><span class="n">BILL OF MATERIALS</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> what is bolted to the robot today, and what replaces it next. Nothing here is exotic. It is hobby electronics, the kind sold for a few tens of lei a part.</p>
+    </div>
+
+    <details class="deep">
+      <summary>The full parts list</summary>
+
     <div class="split">
       <div class="panel">
         <h3>On the robot today</h3>
@@ -995,10 +1127,18 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           position and heading for aiming outdoors.</p>
       </div>
     </div>
+    </details>
   </section>
 
   <section id="log">
     <div class="shead"><h2>Things that went wrong</h2><span class="n">BUILD LOG</span></div>
+    <div class="prose plain">
+      <p><b>In plain words:</b> five things that went wrong while building it, and what fixed each one. This is the honest part of any project, and usually the part worth reading.</p>
+    </div>
+
+    <details class="deep">
+      <summary>What broke and what fixed it</summary>
+
     <div class="log">
       <article>
         <h3><span class="sym">Symptom</span>The turret vibrated at rest</h3>
@@ -1036,6 +1176,7 @@ footer{margin-top:80px;border-top:1px solid var(--rule);padding:22px 0 60px;
           joystick axes before anything reaches the motor driver.</p>
       </article>
     </div>
+    </details>
   </section>
 
   <section id="crew">
